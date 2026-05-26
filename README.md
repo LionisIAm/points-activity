@@ -45,11 +45,21 @@ After install, restart your Claude Code session or run `/plugin reload-plugins`.
 
 ### Cowork Desktop
 
-1. Go to the [latest release](https://github.com/LionisIAm/points-activity/releases/latest) and download `points-activity.plugin`.
-2. Open Cowork Desktop → Settings → Plugins → install from file → select the downloaded `.plugin` file.
-3. The skill suite will be available next time you start a conversation.
+Cowork installs plugins via its **Add marketplace** dialog (not from a downloaded file). In Cowork Desktop, find the "Add marketplace" entry (location varies by Cowork version — typically under plugin / marketplace settings) and paste either:
 
-Same source, same skills — Cowork just gets a pre-zipped `.plugin` artifact built automatically on each release.
+```
+LionisIAm/points-activity
+```
+
+or the full URL:
+
+```
+https://github.com/LionisIAm/points-activity
+```
+
+Then click **Sync**. Cowork fetches `.claude-plugin/marketplace.json` from the repo and registers the plugin. Activate it in your plugin list afterwards.
+
+> **Note:** The `points-activity.plugin` zip attached to each [release](https://github.com/LionisIAm/points-activity/releases) is an artifact for future use (e.g. air-gapped or org-managed installs). It is **not** a Chrome browser extension and cannot be installed via Chrome's "Install Unpacked Extension" — Cowork plugins are a separate concept.
 
 ### Manual (any runtime that reads `~/.claude/skills/`)
 
