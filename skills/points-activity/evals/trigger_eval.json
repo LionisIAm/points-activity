@@ -1,22 +1,152 @@
 [
-  {"query": "yo can you grab my hyatt points activity for the last 6 months, wanna reconcile against some hotel invoices", "should_trigger": "hyatt-activity", "note": "named program + period"},
-  {"query": "pull my United mileage activity since Jan 2024 and tell me my balance", "should_trigger": "united-activity", "note": "named airline + period + balance"},
-  {"query": "export everything from https://all.accor.com/account/en/global-transaction-history", "should_trigger": "accor-activity", "note": "URL only"},
-  {"query": "I need my aeroplan transactions, the reward bookings especially, to match against my flight receipts", "should_trigger": "aeroplan-activity", "note": "named + redemption emphasis"},
-  {"query": "update my IHG sheet please", "should_trigger": "ihg-activity", "note": "terse, named"},
-  {"query": "can you get me all my points and miles activity across all my loyalty accounts into csvs?", "should_trigger": "points-activity", "note": "multi-program -> orchestrator"},
-  {"query": "I have a Marriott Bonvoy account, can you extract my points activity from it?", "should_trigger": "points-activity", "note": "program with NO sub-skill -> orchestrator general playbook"},
-  {"query": "grab my points history from this loyalty site, here's the url: https://www.britishairways.com/travel/loyalty/...", "should_trigger": "points-activity", "note": "unknown program by URL -> orchestrator"},
-  {"query": "what's my current Hyatt balance and recent stays?", "should_trigger": "hyatt-activity", "note": "balance + activity, named"},
-  {"query": "sync my alaska mileage plan activity", "should_trigger": "points-activity", "note": "alaska sub-skill pending -> orchestrator general playbook"},
-  {"query": "book me a hyatt room in Barcelona for next weekend", "should_trigger": "none", "note": "NEAR MISS: hyatt but booking, not activity"},
-  {"query": "how many points do I need for a free night at an IHG property in Lisbon?", "should_trigger": "none", "note": "NEAR MISS: IHG points but award pricing, not my activity"},
-  {"query": "summarize this united.com fare rules PDF I downloaded", "should_trigger": "none", "note": "NEAR MISS: united + file, but PDF summary"},
-  {"query": "what's the best credit card for earning aeroplan points?", "should_trigger": "none", "note": "NEAR MISS: aeroplan earning, but advice not extraction"},
-  {"query": "build me a dashboard showing my net worth across accounts", "should_trigger": "none", "note": "NEAR MISS: accounts/balance but finance dashboard"},
-  {"query": "scrape the product prices from this accor hotel booking page", "should_trigger": "none", "note": "NEAR MISS: accor + scrape, but prices not points"},
-  {"query": "transfer my Amex points to my Aeroplan account", "should_trigger": "none", "note": "NEAR MISS: aeroplan transfer, but an action not a read"},
-  {"query": "read this xlsx of my expenses and categorize them", "should_trigger": "none", "note": "near miss: csv/data but not loyalty"},
-  {"query": "what hotels does World of Hyatt have in the Algarve?", "should_trigger": "none", "note": "NEAR MISS: hyatt, but property search"},
-  {"query": "get my points activity for the last quarter and drop it in a spreadsheet", "should_trigger": "points-activity", "note": "generic, no program named -> orchestrator asks/routes"}
+  {
+    "query": "yo can you grab my hyatt points activity for the last 6 months, wanna reconcile against some hotel invoices",
+    "should_trigger": "hyatt-activity",
+    "note": "named program + period"
+  },
+  {
+    "query": "pull my United mileage activity since Jan 2024 and tell me my balance",
+    "should_trigger": "united-activity",
+    "note": "named airline + period + balance"
+  },
+  {
+    "query": "export everything from https://all.accor.com/account/en/global-transaction-history",
+    "should_trigger": "accor-activity",
+    "note": "URL only"
+  },
+  {
+    "query": "I need my aeroplan transactions, the reward bookings especially, to match against my flight receipts",
+    "should_trigger": "aeroplan-activity",
+    "note": "named + redemption emphasis"
+  },
+  {
+    "query": "update my IHG sheet please",
+    "should_trigger": "ihg-activity",
+    "note": "terse, named"
+  },
+  {
+    "query": "can you get me all my points and miles activity across all my loyalty accounts into csvs?",
+    "should_trigger": "points-activity",
+    "note": "multi-program -> orchestrator"
+  },
+  {
+    "query": "I have a Marriott Bonvoy account, can you extract my points activity from it?",
+    "should_trigger": "points-activity",
+    "note": "program with NO sub-skill -> orchestrator general playbook"
+  },
+  {
+    "query": "grab my points history from this loyalty site, here's the url: https://www.britishairways.com/travel/loyalty/...",
+    "should_trigger": "points-activity",
+    "note": "unknown program by URL -> orchestrator"
+  },
+  {
+    "query": "what's my current Hyatt balance and recent stays?",
+    "should_trigger": "hyatt-activity",
+    "note": "balance + activity, named"
+  },
+  {
+    "query": "sync my alaska mileage plan activity",
+    "should_trigger": "points-activity",
+    "note": "alaska sub-skill pending -> orchestrator general playbook"
+  },
+  {
+    "query": "book me a hyatt room in Barcelona for next weekend",
+    "should_trigger": "none",
+    "note": "NEAR MISS: hyatt but booking, not activity"
+  },
+  {
+    "query": "how many points do I need for a free night at an IHG property in Lisbon?",
+    "should_trigger": "none",
+    "note": "NEAR MISS: IHG points but award pricing, not my activity"
+  },
+  {
+    "query": "summarize this united.com fare rules PDF I downloaded",
+    "should_trigger": "none",
+    "note": "NEAR MISS: united + file, but PDF summary"
+  },
+  {
+    "query": "what's the best credit card for earning aeroplan points?",
+    "should_trigger": "none",
+    "note": "NEAR MISS: aeroplan earning, but advice not extraction"
+  },
+  {
+    "query": "build me a dashboard showing my net worth across accounts",
+    "should_trigger": "none",
+    "note": "NEAR MISS: accounts/balance but finance dashboard"
+  },
+  {
+    "query": "scrape the product prices from this accor hotel booking page",
+    "should_trigger": "none",
+    "note": "NEAR MISS: accor + scrape, but prices not points"
+  },
+  {
+    "query": "transfer my Amex points to my Aeroplan account",
+    "should_trigger": "none",
+    "note": "NEAR MISS: aeroplan transfer, but an action not a read"
+  },
+  {
+    "query": "read this xlsx of my expenses and categorize them",
+    "should_trigger": "none",
+    "note": "near miss: csv/data but not loyalty"
+  },
+  {
+    "query": "what hotels does World of Hyatt have in the Algarve?",
+    "should_trigger": "none",
+    "note": "NEAR MISS: hyatt, but property search"
+  },
+  {
+    "query": "get my points activity for the last quarter and drop it in a spreadsheet",
+    "should_trigger": "points-activity",
+    "note": "generic, no program named -> orchestrator asks/routes"
+  },
+  {
+    "query": "get my Alaska Atmos Rewards points activity for the last year",
+    "should_trigger": "alaska-activity",
+    "note": "named program + period"
+  },
+  {
+    "query": "export everything from https://www.alaskaair.com/atmosrewards/account/activity",
+    "should_trigger": "alaska-activity",
+    "note": "URL only"
+  },
+  {
+    "query": "update my Mileage Plan sheet and tell me my balance",
+    "should_trigger": "alaska-activity",
+    "note": "legacy name + balance"
+  },
+  {
+    "query": "book me an award flight on Alaska to Seattle",
+    "should_trigger": "none",
+    "note": "NEAR MISS: Alaska award but booking, not activity"
+  },
+  {
+    "query": "how many Alaska miles do I need for a first class seat to Tokyo?",
+    "should_trigger": "none",
+    "note": "NEAR MISS: Alaska miles but award pricing"
+  },
+  {
+    "query": "pull my Bilt Rewards points activity",
+    "should_trigger": "bilt-activity",
+    "note": "named program"
+  },
+  {
+    "query": "export everything from bilt.com/rewards/activity",
+    "should_trigger": "bilt-activity",
+    "note": "URL"
+  },
+  {
+    "query": "update my Bilt Mastercard points and show transfers to Hyatt",
+    "should_trigger": "bilt-activity",
+    "note": "card name + transfers"
+  },
+  {
+    "query": "pay my Bilt rent payment this month",
+    "should_trigger": "none",
+    "note": "NEAR MISS: Bilt but paying rent, not activity export"
+  },
+  {
+    "query": "how many Bilt points do I need to transfer to Hyatt for a free night?",
+    "should_trigger": "none",
+    "note": "NEAR MISS: Bilt transfer but award pricing question"
+  }
 ]

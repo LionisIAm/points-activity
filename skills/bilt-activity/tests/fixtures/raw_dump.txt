@@ -1,0 +1,10 @@
+[
+  {"d":"2026-03-10","t":"Cafe One","a":"Dined at","s":"EARNED","tp":30,"b":[{"t":"3x Points on Dining","v":30}]},
+  {"d":"2026-03-20","t":"Cafe Two","a":"Dined at","s":"EARNED","tp":45,"b":[{"t":"3x Points on Dining","v":45}]},
+  {"d":"2026-03-15","t":"Shop X","a":"Earned at","s":"EARNED","tp":300,"b":[{"t":"2X Points on All Transactions","v":200},{"t":"Additional 1X - Point Accelerator","v":100}]},
+  {"d":"2026-03-05","t":"World of Hyatt","a":"Transferred to","s":"SPENT","tp":-9000,"b":[{"t":"Transferred Bilt Points","v":-9000}]},
+  {"d":"2026-03-05","t":"World of Hyatt","a":"Transferred to","s":"SPENT","tp":-9000,"b":[{"t":"Transferred Bilt Points","v":-9000}]},
+  {"d":"2026-03-25","t":"Some Store","a":"Refunded","s":"SPENT","tp":-150,"b":[{"t":"Reversal","v":-150}]},
+  {"d":"2026-03-12","t":"Earned Gold status","a":"","s":"","tp":0,"b":[]},
+  {"d":"2026-02-28","t":"Cafe Three","a":"Dined at","s":"EARNED","tp":60,"b":[{"t":"3x Points on Dining","v":60}]}
+]
