@@ -12,18 +12,6 @@ Turns "get my <program> activity [for <period>]" into a unified
 This skill is the router. It (1) figures out which program is meant, (2) delegates to
 a known sub-skill if one exists, else (3) extracts using the general playbook below.
 
-## Required MCP & runtime
-
-Required MCP server: **Claude in Chrome** (any host — Claude Code, Cowork Desktop,
-custom agent). The skill calls browser-control tools by their short names
-(`navigate`, `javascript_tool`, `read_console_messages`, `tabs_context_mcp`,
-`present_files`); hosts may expose them under prefixed names (e.g.
-`mcp__Claude_in_Chrome__navigate`) — Claude resolves them automatically.
-
-Output directory: write CSVs to `$OUTPUTS_DIR` if the env var is set (Cowork
-convention — files appear as clickable cards); otherwise a path the host provides
-(e.g. `/tmp`, a working directory, or an argument the user passes).
-
 ## The unified contract (every program obeys this)
 
 - **Output CSV**: exactly three columns `Date, Description, Amount`. No Program column
@@ -70,7 +58,8 @@ doesn't "call" skills — it follows their steps):
 | Accor ALL | all.accor.com | `accor-activity` | DOM scrape (expand year accordions) |
 | United MileagePlus | united.com | `united-activity` | internal API (capture x-authorization-api) |
 | Air Canada Aeroplan | aircanada.com | `aeroplan-activity` | DOM scrape (2-year filter; Family Sharing caveat) |
-| Alaska Mileage Plan | alaskaair.com | `alaska-activity` | (pending — Export-to-excel / Shadow-DOM) |
+| Alaska Atmos Rewards | alaskaair.com | `alaska-activity` | DOM scrape (Shadow DOM; 24-month filter) |
+| Bilt Rewards | bilt.com | `bilt-activity` | JSON API (month+year iteration; full history) |
 
 If the user names a program with a sub-skill, prefer going straight to it. If they
 give only a URL or a generic ask, match the domain above; if no match, use the general
