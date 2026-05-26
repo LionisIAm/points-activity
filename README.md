@@ -21,8 +21,10 @@ For each supported loyalty program, the skill:
 | IHG One Rewards | DOM scrape | ~365 days (program limit) |
 | Accor ALL | DOM scrape (year accordions) | Full |
 | Air Canada Aeroplan | DOM scrape (2-year filter) | 2 years (program limit) |
+| Alaska Atmos Rewards | DOM scrape (Shadow DOM traversal) | 24 months (program limit) |
+| Bilt Rewards | Internal JSON API (month+year iteration) | Full |
 
-Plus a **generic playbook** for programs without a dedicated sub-skill (Marriott, Hilton, Alaska, etc.) — Claude tries API-first, falls back to DOM, then to export-to-excel if available.
+Plus a **generic playbook** for programs without a dedicated sub-skill (Marriott, Hilton, Delta, Amex MR, etc.) — Claude tries API-first, falls back to DOM, then to export-to-excel if available.
 
 ## Requirements
 
