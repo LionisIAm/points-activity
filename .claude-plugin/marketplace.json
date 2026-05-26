@@ -6,7 +6,10 @@
   "plugins": [
     {
       "name": "points-activity",
-      "source": ".",
+      "source": {
+        "source": "github",
+        "repo": "LionisIAm/points-activity"
+      },
       "description": "Extract loyalty points/miles account activity from airline and hotel programs into a unified CSV. Uses your own logged-in browser session — no credentials stored, no data leaves your machine."
     }
   ]
