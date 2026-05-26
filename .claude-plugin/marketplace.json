@@ -1,0 +1,13 @@
+{
+  "name": "points-activity",
+  "owner": {
+    "name": "LionisIAm"
+  },
+  "plugins": [
+    {
+      "name": "points-activity",
+      "source": ".",
+      "description": "Extract loyalty points/miles account activity from airline and hotel programs into a unified CSV. Uses your own logged-in browser session — no credentials stored, no data leaves your machine."
+    }
+  ]
+}

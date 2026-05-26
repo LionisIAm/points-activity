@@ -34,8 +34,10 @@ Plus a **generic playbook** for programs without a dedicated sub-skill (Marriott
 
 ```
 /plugin marketplace add github.com/LionisIAm/points-activity
-/plugin install points-activity
+/plugin install points-activity@points-activity
 ```
+
+(`points-activity@points-activity` = plugin name `@` marketplace name — both happen to be the same in this single-plugin repo.)
 
 After install, restart your Claude Code session or run `/plugin reload-plugins`.
 
