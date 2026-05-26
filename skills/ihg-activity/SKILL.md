@@ -83,9 +83,11 @@ activity sum will not equal it (only ~365 days are shown). That mismatch is expe
 
 ## Recurring / scheduled use (monthly)
 
-Run as a **local Cowork Scheduled Task** (needs the user's real Chrome + live IHG
-session, which only exist on their machine). Caveats for the user: local tasks run
-only while the computer is on and the app is open; no completion/failure
-notifications yet; a month-old IHG session will almost always need a fresh login
-first. Each run is a clean session — to report only new activity, save each run's
-`collapsed.csv` (dated filename) and diff against the previous one.
+Run as a **scheduled task on the user's own machine** — needs the user's real
+Chrome + live IHG session, which only exist locally. Use the host's scheduling
+primitive: Cowork — `mcp__scheduled-tasks__create_scheduled_task`; Claude Code —
+cron + headless invocation. Caveats for the user: local tasks run only while the
+computer is on and the app is open; no completion/failure notifications yet; a
+month-old IHG session will almost always need a fresh login first. Each run is a
+clean session — to report only new activity, save each run's `collapsed.csv`
+(dated filename) and diff against the previous one.

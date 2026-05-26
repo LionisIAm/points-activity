@@ -82,10 +82,13 @@ All the reasoning lives in `scripts/transform.py` — read its docstring before 
 
 ## Recurring / scheduled use (monthly)
 
-Best run as a **local Cowork Scheduled Task** (not a Cloud Routine): it needs the
-user's real Chrome with a live Hyatt session, which only exists on their machine.
-Note for the user: local scheduled tasks run only while the computer is on and the
-app is open, there are no completion/failure notifications yet, and a month-old
-session will usually need a fresh login before the run. Each run is a clean session,
-so to report only *new* activity, save each run's `collapsed.csv` (e.g. dated
-filename) and diff against the previous one rather than re-reporting all rows.
+Best run as a **scheduled task on the user's own machine** — it needs the user's
+real Chrome with a live Hyatt session, which only exists locally, so a cloud
+routine won't work. Use whichever scheduling primitive the host provides — Cowork:
+`mcp__scheduled-tasks__create_scheduled_task`; Claude Code: cron + headless
+invocation. Note for the user: local scheduled tasks run only while the computer
+is on and the app is open, there are no completion/failure notifications yet, and
+a month-old session will usually need a fresh login before the run. Each run is a
+clean session, so to report only *new* activity, save each run's `collapsed.csv`
+(e.g. dated filename) and diff against the previous one rather than re-reporting
+all rows.

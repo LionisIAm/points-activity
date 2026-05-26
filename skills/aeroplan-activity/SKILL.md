@@ -84,10 +84,12 @@ Writes `collapsed.csv`, prints row count + points total.
 
 ## Recurring / scheduled use (monthly)
 
-Run as a **local Cowork Scheduled Task** (needs the user's real Chrome + live Aeroplan
-session). Caveats: local tasks run only while the computer is on and the app is open;
-no completion/failure notifications yet; an expired session needs a fresh login. Each
-run is a clean session — to report only new activity, save each run's `collapsed.csv`
-(dated filename) and diff against the prior one. Note the 2-year window: anything older
-than 2 years can never be retrieved, so a monthly cadence is more than enough to never
-miss a transaction.
+Run as a **scheduled task on the user's own machine** — needs the user's real
+Chrome + live Aeroplan session. Use the host's scheduling primitive: Cowork —
+`mcp__scheduled-tasks__create_scheduled_task`; Claude Code — cron + headless
+invocation. Caveats: local tasks run only while the computer is on and the app is
+open; no completion/failure notifications yet; an expired session needs a fresh
+login. Each run is a clean session — to report only new activity, save each run's
+`collapsed.csv` (dated filename) and diff against the prior one. Note the 2-year
+window: anything older than 2 years can never be retrieved, so a monthly cadence
+is more than enough to never miss a transaction.

@@ -32,6 +32,8 @@ Plus a **generic playbook** for programs without a dedicated sub-skill (Marriott
 
 ## Install
 
+### Claude Code CLI
+
 ```
 /plugin marketplace add github.com/LionisIAm/points-activity
 /plugin install points-activity@points-activity
@@ -40,6 +42,23 @@ Plus a **generic playbook** for programs without a dedicated sub-skill (Marriott
 (`points-activity@points-activity` = plugin name `@` marketplace name — both happen to be the same in this single-plugin repo.)
 
 After install, restart your Claude Code session or run `/plugin reload-plugins`.
+
+### Cowork Desktop
+
+1. Go to the [latest release](https://github.com/LionisIAm/points-activity/releases/latest) and download `points-activity.plugin`.
+2. Open Cowork Desktop → Settings → Plugins → install from file → select the downloaded `.plugin` file.
+3. The skill suite will be available next time you start a conversation.
+
+Same source, same skills — Cowork just gets a pre-zipped `.plugin` artifact built automatically on each release.
+
+### Manual (any runtime that reads `~/.claude/skills/`)
+
+```bash
+git clone https://github.com/LionisIAm/points-activity.git
+cp -R points-activity/skills/* ~/.claude/skills/
+```
+
+Restart your Claude session. Useful for development, custom hosts, or runtimes without a plugin marketplace.
 
 ## Usage
 

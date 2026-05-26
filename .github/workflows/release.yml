@@ -1,0 +1,47 @@
+name: Build and release .plugin
+
+# On every semver tag push (e.g. v0.1.0, v0.2.3, v1.0.0-rc1):
+#   1. Build points-activity.plugin (zip of repo with a wrapper directory)
+#   2. Create a GitHub Release for the tag
+#   3. Attach the .plugin file as a downloadable asset
+#
+# Cowork Desktop users install by downloading the .plugin from the release page
+# and dragging it into Cowork's plugin manager.
+# Claude Code users use /plugin marketplace add (same source repo).
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build .plugin file
+        run: |
+          set -euo pipefail
+          mkdir -p staging/points-activity
+          # Copy everything except git internals, CI config, and build output
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='staging' \
+            --exclude='dist' \
+            ./ staging/points-activity/
+          mkdir -p dist
+          (cd staging && zip -r ../dist/points-activity.plugin points-activity/)
+          ls -la dist/
+
+      - name: Create release and upload .plugin asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/points-activity.plugin
+          generate_release_notes: true
+          fail_on_unmatched_files: true

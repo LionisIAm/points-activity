@@ -12,6 +12,18 @@ Turns "get my <program> activity [for <period>]" into a unified
 This skill is the router. It (1) figures out which program is meant, (2) delegates to
 a known sub-skill if one exists, else (3) extracts using the general playbook below.
 
+## Required MCP & runtime
+
+Required MCP server: **Claude in Chrome** (any host — Claude Code, Cowork Desktop,
+custom agent). The skill calls browser-control tools by their short names
+(`navigate`, `javascript_tool`, `read_console_messages`, `tabs_context_mcp`,
+`present_files`); hosts may expose them under prefixed names (e.g.
+`mcp__Claude_in_Chrome__navigate`) — Claude resolves them automatically.
+
+Output directory: write CSVs to `$OUTPUTS_DIR` if the env var is set (Cowork
+convention — files appear as clickable cards); otherwise a path the host provides
+(e.g. `/tmp`, a working directory, or an argument the user passes).
+
 ## The unified contract (every program obeys this)
 
 - **Output CSV**: exactly three columns `Date, Description, Amount`. No Program column
