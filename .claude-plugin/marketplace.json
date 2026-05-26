@@ -1,43 +1,23 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "points-activity",
+  "description": "Extract loyalty points/miles activity from airline and hotel programs into a unified CSV using your own logged-in browser session.",
   "owner": {
-    "name": "LionisIAm",
-    "url": "https://github.com/LionisIAm"
-  },
-  "metadata": {
-    "description": "Loyalty points/miles activity extraction skills for Claude — turns your own logged-in browser session into a unified CSV per program.",
-    "version": "0.1.0"
+    "name": "LionisIAm"
   },
   "plugins": [
     {
       "name": "points-activity",
-      "source": {
-        "source": "url",
-        "url": "https://github.com/LionisIAm/points-activity.git"
-      },
-      "description": "Extract loyalty points/miles account activity from airline and hotel programs (Hyatt, United, IHG, Accor, Aeroplan + generic playbook) into a unified CSV plus current balance. Uses your own logged-in browser session via the Claude in Chrome MCP — no credentials stored, no data leaves your machine.",
-      "version": "0.1.0",
+      "description": "Extract loyalty points/miles account activity from airline and hotel programs (Hyatt, United, IHG, Accor, Aeroplan, plus a generic playbook for unsupported programs) into a unified CSV plus current balance. Uses your own logged-in browser session via the Claude in Chrome MCP — no credentials stored, no data leaves your machine.",
       "author": {
-        "name": "LionisIAm",
-        "url": "https://github.com/LionisIAm"
+        "name": "LionisIAm"
       },
-      "repository": "https://github.com/LionisIAm/points-activity",
-      "homepage": "https://github.com/LionisIAm/points-activity",
-      "license": "MIT",
-      "keywords": [
-        "loyalty",
-        "points",
-        "miles",
-        "award-travel",
-        "claude-code-plugin",
-        "csv-export",
-        "hyatt",
-        "united",
-        "ihg",
-        "accor",
-        "aeroplan"
-      ],
-      "category": "productivity"
+      "category": "productivity",
+      "source": {
+        "source": "github",
+        "repo": "LionisIAm/points-activity"
+      },
+      "homepage": "https://github.com/LionisIAm/points-activity"
     }
   ]
 }
