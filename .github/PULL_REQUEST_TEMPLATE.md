@@ -19,6 +19,9 @@
 - [ ] No hardcoded credentials, account IDs, or PII in code or test fixtures
 - [ ] Tested end-to-end on a real account; output CSV reconciles to balance (or COVERED honestly reports if the program only shows a window)
 - [ ] Routing table in `skills/points-activity/SKILL.md` updated
+- [ ] `README.md` "Supported programs" table updated (and removed from the generic-playbook list if it was there)
+- [ ] `CLAUDE.md` updated if repo structure / conventions / program count changed
+- [ ] No `Co-Authored-By:` trailer in commit messages
 
 ## Sample output (sanitized)
 
