@@ -1,0 +1,26 @@
+{
+  "name": "points-activity",
+  "version": "0.1.0",
+  "description": "Extract loyalty points/miles account activity from airline and hotel programs into a unified CSV. Uses your own logged-in browser session — no credentials stored, no data leaves your machine.",
+  "author": "LionisIAm",
+  "license": "MIT",
+  "homepage": "https://github.com/LionisIAm/points-activity",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LionisIAm/points-activity.git"
+  },
+  "keywords": [
+    "loyalty",
+    "points",
+    "miles",
+    "award-travel",
+    "claude-code",
+    "skill",
+    "csv-export",
+    "hyatt",
+    "united",
+    "ihg",
+    "accor",
+    "aeroplan"
+  ]
+}
