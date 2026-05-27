@@ -34,6 +34,32 @@ Plus a **generic playbook** for programs without a dedicated sub-skill (Marriott
 
 ## Install
 
+### Easiest: let Claude walk you through it
+
+Paste this prompt into your Claude Code session (CLI or the Claude Code inside Claude Desktop) and it will guide you, check prerequisites, and confirm the first run:
+
+```
+Help me install the points-activity plugin: https://github.com/LionisIAm/points-activity
+It extracts my own loyalty points/miles activity (Hyatt, United, IHG, Accor, Aeroplan,
+Alaska, Bilt) from my logged-in browser into a CSV. MIT-licensed, stores no credentials.
+
+Walk me through it:
+1. Confirm I'm in Claude Code (the /plugin command only works there). If I'm in a plain
+   Claude.ai chat, tell me what I need instead.
+2. Give me the exact commands to run — you can't run slash commands yourself, so I'll type
+   them:
+     /plugin marketplace add LionisIAm/points-activity
+     /plugin install points-activity@points-activity
+     /plugin reload-plugins
+3. Check whether the "Claude in Chrome" browser tools are available in this session. If
+   they're missing, tell me to connect Claude in Chrome (a connector in Claude Desktop; an
+   MCP server in the CLI) — the plugin needs them to read my account pages.
+4. Remind me I must be logged in to the loyalty program (e.g. hyatt.com) in that Chrome
+   window first. The plugin never logs in for me and never stores credentials.
+5. Once it's installed, have me try: "get my Hyatt points activity for the last 6 months"
+   and tell me what to expect on the first run.
+```
+
 ### Claude Code CLI
 
 ```
@@ -51,10 +77,13 @@ After install, restart your Claude Code session or run `/plugin reload-plugins`.
 
 Cowork does **not** register third-party marketplaces through its own "Add marketplace" dialog yet — that path is blocked upstream ([anthropics/claude-code#41653](https://github.com/anthropics/claude-code/issues/41653), "External plugin sources are not yet supported"). The working path uses Claude Code CLI, which Cowork mirrors:
 
-1. Install via Claude Code CLI (see above) — this registers the marketplace under `~/.claude/plugins/`.
-2. In Claude Desktop, open the plugin **Directory → Plugins → "Code"** tab. `points-activity` shows up there (the "Code" tab mirrors your Claude Code CLI marketplaces) and you can enable/install it from that view.
+1. In the Claude Code CLI terminal, run just the marketplace-add (the `owner/repo` shorthand):
+   ```
+   /plugin marketplace add LionisIAm/points-activity
+   ```
+2. Open Claude Desktop → plugin **Directory → Plugins → "Code"** tab. `points-activity` appears there and its skills become available **immediately** — no separate install step or "+" click needed (the "Code" tab mirrors your Claude Code CLI marketplaces).
 
-This requires Claude Code CLI installed on the same machine — Cowork shares its `~/.claude/plugins/` state.
+This requires Claude Code CLI installed on the same machine — Cowork shares its `~/.claude/plugins/` state. Cowork's own "Add marketplace" dialog won't work until the upstream bug is fixed.
 
 > **Note:** The `points-activity.plugin` zip attached to each [release](https://github.com/LionisIAm/points-activity/releases) is an artifact for future use (e.g. air-gapped or org-managed installs). It is **not** a Chrome browser extension and cannot be installed via Chrome's "Install Unpacked Extension" — Cowork plugins are a separate concept.
 
