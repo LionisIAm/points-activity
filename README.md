@@ -37,29 +37,24 @@ Plus a **generic playbook** for programs without a dedicated sub-skill (Marriott
 ### Claude Code CLI
 
 ```
-/plugin marketplace add github.com/LionisIAm/points-activity
+/plugin marketplace add LionisIAm/points-activity
 /plugin install points-activity@points-activity
 ```
+
+Use the `owner/repo` shorthand (or a full `https://github.com/LionisIAm/points-activity.git` URL). A bare `github.com/owner/repo` without the scheme is misparsed and fails to clone.
 
 (`points-activity@points-activity` = plugin name `@` marketplace name — both happen to be the same in this single-plugin repo.)
 
 After install, restart your Claude Code session or run `/plugin reload-plugins`.
 
-### Cowork Desktop
+### Claude Desktop (Cowork)
 
-Cowork installs plugins via its **Add marketplace** dialog (not from a downloaded file). In Cowork Desktop, find the "Add marketplace" entry (location varies by Cowork version — typically under plugin / marketplace settings) and paste either:
+Cowork does **not** register third-party marketplaces through its own "Add marketplace" dialog yet — that path is blocked upstream ([anthropics/claude-code#41653](https://github.com/anthropics/claude-code/issues/41653), "External plugin sources are not yet supported"). The working path uses Claude Code CLI, which Cowork mirrors:
 
-```
-LionisIAm/points-activity
-```
+1. Install via Claude Code CLI (see above) — this registers the marketplace under `~/.claude/plugins/`.
+2. In Claude Desktop, open the plugin **Directory → Plugins → "Code"** tab. `points-activity` shows up there (the "Code" tab mirrors your Claude Code CLI marketplaces) and you can enable/install it from that view.
 
-or the full URL:
-
-```
-https://github.com/LionisIAm/points-activity
-```
-
-Then click **Sync**. Cowork fetches `.claude-plugin/marketplace.json` from the repo and registers the plugin. Activate it in your plugin list afterwards.
+This requires Claude Code CLI installed on the same machine — Cowork shares its `~/.claude/plugins/` state.
 
 > **Note:** The `points-activity.plugin` zip attached to each [release](https://github.com/LionisIAm/points-activity/releases) is an artifact for future use (e.g. air-gapped or org-managed installs). It is **not** a Chrome browser extension and cannot be installed via Chrome's "Install Unpacked Extension" — Cowork plugins are a separate concept.
 
