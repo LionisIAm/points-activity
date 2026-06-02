@@ -4,7 +4,7 @@ Project context for AI assistants working in this repo. End users → read [READ
 
 ## What this is
 
-A Claude plugin (`points-activity`) that extracts loyalty points/miles activity from airline and hotel programs into a unified CSV. One **orchestrator** skill routes to **7 program-specific sub-skills** (Hyatt, United, IHG, Accor, Aeroplan, Alaska, Bilt) or falls back to a generic playbook for unsupported programs. Skills drive the user's **own logged-in browser** via the **Claude in Chrome** MCP — the plugin never asks for or stores credentials.
+A Claude plugin (`points-activity`) that extracts loyalty points/miles activity from airline and hotel programs into a unified CSV. One **orchestrator** skill routes to **10 program-specific extractor sub-skills** (Hyatt, United, IHG, Accor, Aeroplan, Alaska, Bilt, Flying Blue, Qatar Privilege Club, Hilton Honors) or falls back to a generic playbook for unsupported programs. Extractors drive the user's **own logged-in browser** via the **Claude in Chrome** MCP — the plugin never asks for or stores credentials. Optional **importer** sub-skills (`finerd-import`, plus `monarch-import` / `copilot-import` scaffolds) push the unified CSV into a finance app via that app's MCP — see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Adding an extractor never requires touching an importer.
 
 Solo-maintained, MIT, public. No commercial backing.
 
