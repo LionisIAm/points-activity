@@ -31,18 +31,21 @@ jobs:
           exit $fail
       - name: Registration checks
         run: python3 tests/test_registration.py
-      - name: Shared activity_output.py copies are byte-identical to canonical
+      - name: Shared helper copies are byte-identical to canonical
         run: |
-          canon=skills/points-activity/scripts/activity_output.py
           fail=0
-          for f in skills/*/scripts/activity_output.py; do
-            [ "$f" = "$canon" ] && continue
-            if ! cmp -s "$canon" "$f"; then
-              echo "DIVERGED from canonical: $f"
-              fail=1
-            fi
+          for helper in activity_output.py canonical_csv.py; do
+            canon="skills/points-activity/scripts/$helper"
+            for f in skills/*/scripts/"$helper" templates/*/scripts/"$helper"; do
+              [ -f "$f" ] || continue
+              [ "$f" = "$canon" ] && continue
+              if ! cmp -s "$canon" "$f"; then
+                echo "DIVERGED from canonical ($helper): $f"
+                fail=1
+              fi
+            done
           done
-          [ $fail -eq 0 ] && echo "OK: all activity_output.py copies match canonical"
+          [ $fail -eq 0 ] && echo "OK: all shared-helper copies match canonical"
           exit $fail
 
   javascript:

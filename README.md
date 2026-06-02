@@ -1,6 +1,6 @@
 # points-activity
 
-Extract loyalty points and miles account activity from airline and hotel loyalty programs into a unified CSV — using your own logged-in browser session. No credentials are ever stored, nothing leaves your machine.
+Extract loyalty points and miles account activity from airline and hotel loyalty programs into a unified CSV — using your own logged-in browser session. No credentials are ever stored. Extraction is fully local: the CSV is written to your disk and nothing is sent anywhere. **Optional** importers can then push that CSV into your own finance app (Finerd today; Monarch and Copilot scaffolded) via that app's MCP — only if you choose to install one.
 
 ## What it does
 
@@ -128,7 +128,12 @@ That part is up to you. Common uses:
 - Feed into a finance / budgeting tool that accepts CSV imports
 - Diff month-over-month to spot unexpected redemptions
 
-This plugin's scope ends at CSV. Integrations with specific finance tools are out of scope here.
+The CSV is the core deliverable, and for many people that's the whole story. If you
+want it pushed into a finance app, **optional importers** (`skills/<app>-import/`) do
+that via the app's MCP — `finerd-import` today, `monarch-import` and `copilot-import`
+scaffolded. Importers are opt-in and fully decoupled: adding a loyalty program never
+requires touching any importer, and never-delete is a hard rule for all of them. See
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Adding a new program
 

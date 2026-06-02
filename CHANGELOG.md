@@ -46,6 +46,18 @@ independently reviewable.
   "copy the template"; CI runs the template's test too so the scaffold can't rot.
 - `wait_for_login.js` added to all 7 existing extractors; the orchestrator login
   step is standardized on polling (no manual "are you logged in?" prompt).
+- **Importer layer** (pluggable "sinks"). `docs/ARCHITECTURE.md` defines two roles —
+  extractors (`*-activity`, program → CSV) and importers (`*-import`, CSV → finance
+  app). The only mandatory importer rule is **never-delete**; everything else
+  (dedupe, verified-balance, earn→income mapping) is per-app, with `finerd-import` as
+  the reference. Shared reader `canonical_csv.py` mirrors `activity_output.py` and is
+  CI byte-diffed too.
+- `skills/finerd-import/` — the former `points-import`, renamed and reframed as the
+  reference api/mcp importer (no behavior change to the Finerd flow).
+- `skills/monarch-import/`, `skills/copilot-import/` — scaffolds (api/mcp via each
+  app's MCP); pipeline shape fixed, app-specific MCP calls marked TODO.
+- `templates/import-skill/` — scaffold for new importers; CONTRIBUTING/README/CLAUDE
+  reframed so extractors stay app-agnostic and importers are opt-in.
 
 ### Notes
 - Bumped `plugin.json` to **0.3.0** for the breaking earning-date change.
