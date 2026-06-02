@@ -58,6 +58,12 @@ independently reviewable.
   app's MCP); pipeline shape fixed, app-specific MCP calls marked TODO.
 - `templates/import-skill/` — scaffold for new importers; CONTRIBUTING/README/CLAUDE
   reframed so extractors stay app-agnostic and importers are opt-in.
+- **Three new program extractors**, app-agnostic (CSV-only), dogfooding the new
+  template + structure: `flyingblue-activity` (Air France-KLM, internal JSON API),
+  `qatar-activity` (Privilege Club / Avios, DOM scrape), `hilton-activity` (Hilton
+  Honors, paginated DOM scrape — note: redemptions aren't on Hilton's web feed). Each
+  ships sanitized fixtures + unit tests and is registered in the routing table and
+  README. Hilton removed from the generic-playbook list.
 
 ### Notes
 - Bumped `plugin.json` to **0.3.0** for the breaking earning-date change.

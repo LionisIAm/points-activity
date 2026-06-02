@@ -23,8 +23,11 @@ For each supported loyalty program, the skill:
 | Air Canada Aeroplan | DOM scrape (2-year filter) | 2 years (program limit) |
 | Alaska Atmos Rewards | DOM scrape (Shadow DOM traversal) | 24 months (program limit) |
 | Bilt Rewards | Internal JSON API (month+year iteration) | Full |
+| Flying Blue (Air France-KLM) | Internal JSON API | Full (one call) |
+| Qatar Airways Privilege Club | DOM scrape | ~10 most recent visible |
+| Hilton Honors | DOM scrape (paginated) | 12 months (program limit); redemptions not on web |
 
-Plus a **generic playbook** for programs without a dedicated sub-skill (Marriott, Hilton, Delta, Amex MR, etc.) — Claude tries API-first, falls back to DOM, then to export-to-excel if available.
+Plus a **generic playbook** for programs without a dedicated sub-skill (Marriott, Delta, Amex MR, etc.) — Claude tries API-first, falls back to DOM, then to export-to-excel if available.
 
 ## Requirements
 

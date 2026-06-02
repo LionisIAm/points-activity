@@ -64,6 +64,9 @@ doesn't "call" skills — it follows their steps):
 | Air Canada Aeroplan | aircanada.com | `aeroplan-activity` | DOM scrape (2-year filter; Family Sharing caveat) |
 | Alaska Atmos Rewards | alaskaair.com | `alaska-activity` | DOM scrape (Shadow DOM; 24-month filter) |
 | Bilt Rewards | bilt.com | `bilt-activity` | JSON API (month+year iteration; full history) |
+| Flying Blue (Air France-KLM) | flyingblue.com | `flyingblue-activity` | internal JSON API (session cookie; full history in one call) |
+| Qatar Airways Privilege Club | qatarairways.com | `qatar-activity` | DOM scrape (rendered table; ~10 most recent visible) |
+| Hilton Honors | hilton.com | `hilton-activity` | DOM scrape (paginated; 12-month max; redemptions not exposed on web) |
 
 If the user names a program with a sub-skill, prefer going straight to it. If they
 give only a URL or a generic ask, match the domain above; if no match, use the general
