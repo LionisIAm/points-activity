@@ -65,7 +65,7 @@ Every program emits identical CSV shape via `activity_output.py:write_activity(p
 
 ### Collapsing rules (shared across programs)
 - Redemptions / flights / reward bookings → keep **real** transaction date, each its own row (so they can be matched against itineraries/invoices)
-- Earnings / transfers / bonuses → move date to **last day of the month**, then collapse identical `(date, description)` rows by summing
+- Earnings / transfers / bonuses → keep their **real** transaction date, then collapse identical `(date, description)` rows by summing
 - Drop zero-amount rows after collapsing
 - Keep only spendable currency (e.g. United miles, not PQP; Accor reward points, not status points)
 

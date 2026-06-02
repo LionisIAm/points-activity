@@ -2,6 +2,10 @@
 Unit test for the Alaska transform. Runs transform.py against the sanitized fixture and
 asserts the unified CSV output and the reconciliation property. No live account needed.
 
+Contract (v0.3): earnings collapse by (REAL date, description); redemptions/reversals
+keep their real date, each its own row. Earlier versions collapsed earnings to the last
+day of the month — this fixture/test now asserts per-date grouping.
+
 Run:  python3 -m pytest skills/alaska-activity/tests/test_transform.py
    or: python3 skills/alaska-activity/tests/test_transform.py
 """
@@ -13,13 +17,13 @@ TRANSFORM = os.path.join(SKILL, 'scripts', 'transform.py')
 FIXTURE = os.path.join(HERE, 'fixtures', 'raw_dump.txt')
 
 EXPECTED_ROWS = [
-    ('2026-03-31', 'SOME BANK CARD FOREIGN PURCHASE BONUS', '2000'),
-    ('2026-03-31', 'SOME BANK CARD ACTIVITY', '5000'),
+    ('2026-03-15', 'SOME BANK CARD FOREIGN PURCHASE BONUS', '2000'),
+    ('2026-03-15', 'SOME BANK CARD ACTIVITY', '5000'),
     ('2026-02-10', 'Partner Air XYZ-ABC ICODE John Doe', '-30000'),
     ('2026-02-10', 'Partner Air XYZ-ABC ICODE Jane Doe', '-30000'),
     ('2026-02-10', 'Partner Air Rollback: XYZ-ABC ICODE Jane Doe', '30000'),
-    ('2026-01-31', 'POINTS.COM INSTANT POINTS', '35000'),
-    ('2025-12-31', 'SOME BANK CARD ACTIVITY', '345'),
+    ('2026-01-20', 'POINTS.COM INSTANT POINTS', '35000'),
+    ('2025-12-15', 'SOME BANK CARD ACTIVITY', '345'),
 ]
 FAKE_BALANCE = 12345
 
@@ -38,8 +42,8 @@ def _run():
 
 def test_filename_uses_covered_range():
     fname, _ = _run()
-    # covered range = oldest..newest actual rows
-    assert fname == 'alaska_activity_2025-12-31_2026-03-31.csv', fname
+    # covered range = oldest..newest actual rows (real dates, not month-end)
+    assert fname == 'alaska_activity_2025-12-15_2026-03-15.csv', fname
 
 
 def test_columns_and_rows():
@@ -58,7 +62,7 @@ def test_status_only_rows_dropped():
 
 
 def test_reconciles_to_balance():
-    # with the full window captured, sum(Amount) == balance
+    # with the full window captured, sum(Amount) == balance (grouping-invariant)
     _, rows = _run()
     assert sum(int(r[2]) for r in rows[1:]) == FAKE_BALANCE
 

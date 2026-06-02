@@ -12,18 +12,17 @@ CLASSIFICATION — deliberately NOT a status whitelist. We capture every row (th
 uses a structural date+number filter), and decide redemption-vs-earning by robust signals
 so unanticipated status labels still route correctly:
 
-  redemption-type (keep REAL date, each row separate, matched to itineraries later) iff:
+  kind='redeem' (each row stays separate, matched to itineraries later) iff:
     - Total points is negative (any spend), OR
     - the Activity text carries an award/booking marker: a flight route like "BCN-SFO",
       a "Rollback:" reversal, or the words Reward/Award/Redemption/Redeposit.
-  everything else = earning/transfer -> move to last day of month, collapse identical
-  (date, description) by summing.
+  everything else = kind='earn' (collapsed by (date, desc) in shared code).
 
 This means a change/rebook nets out naturally and per-leg: e.g. 4x -70,000 Redeemed +
 2x +70,000 "Rollback: ... Redeposited" = -140,000 for the trip, each row preserved.
 
-After collapsing, drop zero-Total rows (status-only award rows and monthly status-point
-accruals contribute 0 to spendable balance).
+Drop zero-Total rows (status-only award rows and monthly status-point accruals contribute
+0 to spendable balance) — shared code drops these.
 
 CAUTION — case-duplicate descriptions: Atmos sometimes lists the same award row twice
 with the passenger name in different case. Those are REAL separate transactions (verified
@@ -34,16 +33,12 @@ window (the observed gap equalled the pre-window starting balance).
 
 Usage: python3 transform.py raw.txt out_dir [from] [to] [balance]
 """
-import calendar, re, sys, os
+import re, sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from activity_output import write_activity, filter_by_period
 
 # award/booking markers in the Activity text (case-insensitive)
 AWARD_MARKER = re.compile(r'\b[A-Z]{3}-[A-Z]{3}\b|rollback|reward|award|redemption|redeposit', re.I)
-
-def eom(d):
-    m, dd, y = d.split('/'); m, y = int(m), int(y)
-    return f"{y:04d}-{m:02d}-{calendar.monthrange(y, m)[1]:02d}"
 
 def iso(d):
     m, dd, y = d.split('/'); return f"{int(y):04d}-{int(m):02d}-{int(dd):02d}"
@@ -62,19 +57,15 @@ def main():
     bal   = sys.argv[5] if len(sys.argv) > 5 else None
 
     rows = [l.split('~') for l in open(raw).read().strip().split('\n') if l.strip()]
-    agg = {}
+    out = []
     for c in rows:
         date, activity = c[0], c[1].strip()
         total = num(c[5])
-        if is_redemption(activity, total):
-            key = (iso(date), activity)          # real date, keep each row separate
-        else:
-            key = (eom(date), activity)          # earning/transfer -> end of month
-        agg[key] = agg.get(key, 0) + total
+        kind = 'redeem' if is_redemption(activity, total) else 'earn'
+        out.append((iso(date), activity, total, kind))
 
-    collapsed = [(d, desc, a) for (d, desc), a in agg.items()]
-    collapsed = filter_by_period(collapsed, rfrom, rto)
-    write_activity('alaska', collapsed, out_dir, rfrom, rto, bal)
+    out = filter_by_period(out, rfrom, rto)
+    write_activity('alaska', out, out_dir, rfrom, rto, bal)
 
 if __name__ == '__main__':
     main()

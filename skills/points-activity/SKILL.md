@@ -24,15 +24,19 @@ a known sub-skill if one exists, else (3) extracts using the general playbook be
 - **Collapsing rules** (shared across programs):
   - *Redemptions / flights / reward bookings* (things later matched to invoices or
     itineraries) → keep the REAL transaction date; each booking its own row.
-  - *Earnings / transfers / bonuses* → move the date to the LAST DAY of its month and
-    collapse identical (date, description) rows by summing.
+  - *Earnings / transfers / bonuses* → keep the REAL transaction date; identical
+    (date, description) rows are collapsed by summing.
   - Drop zero-amount rows after collapsing.
   - For a program with multiple point "currencies" (e.g. Accor reward vs status,
     United miles vs PQP), keep only the SPENDABLE currency (reward points / redeemable
     miles); ignore status/qualifying credits.
-- The sub-skill transforms all emit this via the shared helper
-  `points-activity/scripts/activity_output.py` (`write_activity(...)`), which also
-  prints machine-readable `BALANCE:`, `COVERED:`, `REQUESTED:`, `FILE:`, `ROWS:` lines.
+- **Sub-skills classify, the shared helper groups.** Each `transform.py` emits
+  4-tuples `(date, description, amount, kind)` with `kind in {'earn','redeem'}`;
+  `points-activity/scripts/activity_output.py` (`write_activity(...)`) owns the
+  grouping (earn → collapse by (real date, description); redeem → each its own row)
+  and also prints machine-readable `BALANCE:`, `COVERED:`, `REQUESTED:`, `FILE:`,
+  `ROWS:` lines. Adding a program is parse-and-classify only — no per-program
+  collapse logic. (3-tuples are still accepted and treated as `earn`.)
 
 ## Period handling
 

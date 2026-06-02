@@ -116,7 +116,7 @@ Every program emits the same shape so downstream tools can be uniform:
 - **Balance**: reported alongside the file
 - **Collapsing**:
   - Redemptions / flights / reward bookings keep their **real** transaction date (each its own row, so you can match against itineraries)
-  - Earnings / transfers / bonuses are moved to the **last day of their month** and identical `(date, description)` rows are summed
+  - Earnings / transfers / bonuses keep their **real** transaction date; identical `(date, description)` rows are summed
   - Zero-amount rows dropped
 - **Spendable currency only**: for programs with multiple currencies (Accor reward vs status, United miles vs PQP), only the spendable one is included
 

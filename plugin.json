@@ -1,6 +1,6 @@
 {
   "name": "points-activity",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Extract loyalty points/miles account activity from airline and hotel programs into a unified CSV. Uses your own logged-in browser session — no credentials stored, no data leaves your machine.",
   "author": {
     "name": "LionisIAm",

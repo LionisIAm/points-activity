@@ -22,11 +22,29 @@ independently reviewable.
   into an enforced invariant.
 - This CHANGELOG.
 
+### Changed (BREAKING — output contract)
+- **Earnings now group by their REAL transaction date**, not the last day of the
+  month. A stay or card-credit dated `2026-03-15` stays on `2026-03-15`. Previously
+  earnings were collapsed to month-end (`2026-03-31`). Redemptions already kept their
+  real date; that is unchanged. CSV columns (`Date, Description, Amount`) are
+  unchanged — only the dates of earning rows move. Anything that keyed off month-end
+  earning dates must adjust.
+- **Classification moved into the shared helper.** Each `transform.py` now emits
+  4-tuples `(date, description, amount, kind)` with `kind in {'earn','redeem'}`;
+  `activity_output.py:write_activity()` owns the grouping (earn → collapse by
+  (date, description); redeem → each its own row). Adding a program is now
+  parse-and-classify only — no per-program collapse logic. 3-tuples are still
+  accepted (treated as `earn`) for back-compat.
+
+### Added
+- CI step asserting every `activity_output.py` copy is byte-identical to the
+  canonical `skills/points-activity/scripts/activity_output.py` — the
+  "change all copies in lockstep" rule is now enforced, not just documented.
+
 ### Notes
-- No behavior change in this groundwork. The output-contract migration
-  (per-date grouping, 4-tuple earn/redeem classification) and the importer layer
-  land in subsequent phases and will bump the MAJOR-ish version with explicit
-  migration notes here.
+- Bumped `plugin.json` to **0.3.0** for the breaking earning-date change.
+- The importer layer (Finerd/Monarch/Copilot via their MCPs) lands in a later
+  phase; this release is still extract-to-CSV only.
 
 ## [0.2.1] and earlier
 See git history prior to the introduction of this CHANGELOG.

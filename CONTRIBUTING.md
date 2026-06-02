@@ -85,7 +85,10 @@ write_activity(program, rows, out_dir,
                requested_from=None, requested_to=None, balance=None)
 ```
 
-Where `rows` is a list of `(date_iso, description, amount_int)` already collapsed/cleaned by the program-specific logic.
+Where `rows` is a list of `(date_iso, description, amount_int, kind)` tuples with
+`kind in {'earn', 'redeem'}`. The program classifies each row; `write_activity` does
+the grouping (earn → collapse by (date, description); redeem → each its own row).
+3-tuples `(date_iso, description, amount_int)` are still accepted and treated as `earn`.
 
 The helper writes the CSV and prints machine-readable lines the orchestrator parses:
 
@@ -102,7 +105,7 @@ ROWS: <n>
 ## Collapsing rules (shared across all programs)
 
 - **Redemptions / flights / reward bookings** (things later matched to invoices/itineraries): keep the **real** transaction date; each booking gets its own row
-- **Earnings / transfers / bonuses**: move date to **last day of the month**, then collapse identical `(date, description)` rows by summing
+- **Earnings / transfers / bonuses**: keep the **real** transaction date, then collapse identical `(date, description)` rows by summing
 - **Drop zero-amount rows** after collapsing
 - **Spendable currency only**: ignore status/qualifying currencies (United PQP, Accor status points, etc.)
 
