@@ -74,10 +74,10 @@ activity sum will not equal it (only ~365 days are shown). That mismatch is expe
    description so all nights of one booking collapse into ONE Stay row (a 4-night
    reward booking 0 / -45,000 / -42,000 / -45,000 → one -132,000 row). Real date kept
    because redemptions get matched to invoices later.
-3. **Earnings/transfers:** move the date to the last day of its month, so repeated
-   monthly items collapse together.
-4. **Collapse** by (Date, normalized Description), sum Points. Brand + hotel after
-   ' | ' are KEPT (used to match reservations later).
+3. **Earnings/transfers:** keep the real transaction date, `kind='earn'`.
+4. Emit 4-tuples; the shared `activity_output.py` collapses earnings by
+   (Date, normalized Description), summing Points. Brand + hotel after ' | ' are
+   KEPT (used to match reservations later).
 5. **Drop zero-point rows** — but only AFTER collapsing, so a 0-point free night still
    merges into its booking first.
 

@@ -73,9 +73,13 @@ playbook.
 
 Follow this to extract a new program, then consider writing a new sub-skill for it.
 
-1. **Open & verify login.** Navigate to the activity page in the connected Chrome.
-   Confirm login programmatically (balance visible, no sign-in buttons; URL not on a
-   /sign-in path). Never log in for the user. Decline cookie banners (privacy).
+1. **Open & wait for login (no user prompt).** Navigate to the activity page in the
+   connected Chrome, then run the sub-skill's `scripts/wait_for_login.js` via
+   `javascript_tool`: it polls every ~3s for up to 4 minutes and returns
+   `{status:"logged-in", ...}` or `{status:"timeout"}`. Detection is either an
+   auth-gated API probe (API programs) or "URL not on a /sign-in path AND a balance
+   value renders" (DOM programs). Only ask the user if it times out. Never log in for
+   the user. Decline cookie banners (privacy).
 2. **Find the data source — API first.** Read `performance.getEntriesByType('resource')`
    for backend hosts/paths matching activity|transaction|history|loyalty|points (filter
    out analytics/CDN). If an endpoint exists:

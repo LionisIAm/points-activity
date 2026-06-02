@@ -22,6 +22,7 @@ Solo-maintained, MIT, public. No commercial backing.
 │   └── <program>-activity/           # one per supported program (hyatt, united, ihg, ...)
 │       ├── SKILL.md
 │       ├── scripts/
+│       │   ├── wait_for_login.js     # polls until logged in (API probe, or balance renders)
 │       │   ├── fetch_activity.js     # API path (hits internal endpoint)
 │       │   ├── scrape_activity.js    # DOM path (reads rendered page) — alternative to API
 │       │   ├── dump_console.js       # console-dumps rows for read_console_messages
@@ -31,8 +32,14 @@ Solo-maintained, MIT, public. No commercial backing.
 │       └── tests/
 │           ├── fixtures/raw_dump.txt # sanitized sample console dump
 │           └── test_transform.py     # stdlib unittest, no pytest dep
+├── templates/
+│   └── activity-skill/               # contributor scaffold — `cp -R` to skills/<program>-activity (runnable example)
+├── tests/
+│   └── test_registration.py          # fails if a *-activity program isn't wired into the routing table
 ├── .github/
-│   ├── workflows/release.yml         # on `v*` tag → builds .plugin, attaches to GitHub Release
+│   ├── workflows/
+│   │   ├── ci.yml                     # py_compile + per-program & template tests + registration + activity_output byte-diff + node --check
+│   │   └── release.yml               # on `v*` tag → builds .plugin, attaches to GitHub Release
 │   ├── ISSUE_TEMPLATE/               # bug / new-program / playbook-broken
 │   └── PULL_REQUEST_TEMPLATE.md
 ├── README.md / CONTRIBUTING.md / SECURITY.md / LICENSE / CLAUDE.md (this)

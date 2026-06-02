@@ -40,6 +40,12 @@ independently reviewable.
 - CI step asserting every `activity_output.py` copy is byte-identical to the
   canonical `skills/points-activity/scripts/activity_output.py` — the
   "change all copies in lockstep" rule is now enforced, not just documented.
+- `templates/activity-skill/`: a runnable contributor scaffold (fake "Example
+  Rewards" program) with `wait_for_login.js`, both extractor paths, `transform.py`,
+  the canonical `activity_output.py`, and a passing test. CONTRIBUTING now says
+  "copy the template"; CI runs the template's test too so the scaffold can't rot.
+- `wait_for_login.js` added to all 7 existing extractors; the orchestrator login
+  step is standardized on polling (no manual "are you logged in?" prompt).
 
 ### Notes
 - Bumped `plugin.json` to **0.3.0** for the breaking earning-date change.

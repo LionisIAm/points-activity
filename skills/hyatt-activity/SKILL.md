@@ -60,9 +60,10 @@ something in the API shape likely changed (see below).
 `collapsed.csv`: columns `Date, Component, Points`. Produced by:
 1. Normalize every transaction into one row per point-bearing component.
 2. Keep only real points rows (PointsType `P`); drop night credits (`N`).
-3. For every category **except AWARD**, move the date to the **last day of its month**;
-   AWARD keeps its real date.
-4. Group by `(Date, Component)`, sum `Points`.
+3. Classify each row: AWARD → `kind='redeem'` (kept per-row); everything else →
+   `kind='earn'`. Every row keeps its **real date**.
+4. Emit 4-tuples; the shared `activity_output.py` collapses earnings by
+   `(date, Component)` and keeps redemptions one row each.
 
 All the reasoning lives in `scripts/transform.py` — read its docstring before editing.
 

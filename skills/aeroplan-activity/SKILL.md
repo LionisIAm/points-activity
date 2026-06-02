@@ -76,8 +76,9 @@ Writes `collapsed.csv`, prints row count + points total.
    everything else (card transfers like Amex / Chase Ultimate Rewards, bonuses, partner
    earns) is an *earning/transfer*.
 2. **Redemptions**: keep the real transaction date.
-3. **Earnings/transfers**: move the date to the last day of its month.
-4. **Collapse** by (Date, "Partner: Description"), sum Points. Identical rows on the
+3. **Earnings/transfers**: keep the real transaction date, `kind='earn'`.
+4. The shared `activity_output.py` collapses earnings by (Date, "Partner: Description"),
+   summing Points. Identical rows on the
    same date merge (e.g. two equal Flight Reward Bookings → one summed row); rows that
    differ (e.g. cancellations carrying distinct transaction numbers) stay separate.
 5. **Drop zero-point rows** after collapsing.

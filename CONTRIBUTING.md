@@ -4,13 +4,26 @@ The most useful contributions are **new loyalty programs**. Each program is a se
 
 ## Adding a new program
 
-### 1. Pick a starting template
+### 1. Start from the template
 
-- **API-based** (program exposes a clean internal JSON API): start from `skills/hyatt-activity/`
-- **DOM-scrape** (table on the activity page, no usable API): start from `skills/ihg-activity/`
-- **API with runtime auth capture** (auth header attached by SPA at request time, not in localStorage): start from `skills/united-activity/`
+```
+cp -R templates/activity-skill skills/<program>-activity
+```
 
-Copy the chosen template to `skills/<program>-activity/`.
+The template is runnable as-is (a fake "Example Rewards" program) — run its test to
+see the whole pipeline before you change anything:
+
+```
+cd skills/<program>-activity/tests && python3 test_transform.py
+```
+
+Set `name:` in `SKILL.md` to `<program>-activity` (must equal the directory). Then pick
+ONE extraction path and delete the other:
+- **API** (clean internal JSON): keep `scripts/fetch_activity.js`. Real-world auth
+  references: `skills/hyatt-activity/` (simple) and `skills/united-activity/`
+  (runtime-attached token via `capture_auth.js`).
+- **DOM scrape** (no usable API): keep `scripts/scrape_activity.js`; see
+  `skills/ihg-activity/` and `skills/accor-activity/`.
 
 ### 2. Find the data source
 
@@ -34,10 +47,11 @@ If the SPA bypasses `window.fetch`/XHR (Amplify, web worker, etc.), the API isn'
 
 Inside `skills/<program>-activity/scripts/`:
 
-- **`fetch_activity.js`** (API) or **`scrape_activity.js`** (DOM) — the actual extraction; stashes raw rows on `window.__<short>` and returns `{count, oldest, newest}` (or `{error}`)
-- **`dump_console.js`** — dumps stashed rows to console with a unique prefix (e.g. `HX###~...` for Hyatt, `UA###~...` for United). Direct JSON returns from `javascript_tool` are sometimes blocked by the chat — the console-dump path avoids this
-- **`transform.py`** — parses console-dumped lines, classifies rows (redemption vs earning), collapses per shared rules, writes CSV via `activity_output.py`
-- **`activity_output.py`** — the shared output contract (copy verbatim from another sub-skill; do NOT diverge — see "Output contract" below)
+- **`wait_for_login.js`** — polls for login (API probe, or "URL not on /sign-in AND a balance renders"); returns `{status:"logged-in", ...}` or `{status:"timeout"}`. Poll ~3s for up to 4 min; only ask the user on timeout
+- **`fetch_activity.js`** (API) or **`scrape_activity.js`** (DOM) — the actual extraction; stashes raw rows on `window.__<short>act` and returns `{count, oldest, newest}` (or `{error}`)
+- **`dump_console.js`** — dumps stashed rows to console with a UNIQUE prefix (e.g. `HX###:` for Hyatt, `UA###:` for United). Direct JSON returns from `javascript_tool` are sometimes blocked by the chat — the console-dump path avoids this
+- **`transform.py`** — parses console-dumped lines and **classifies** each row as `earn`/`redeem`, emitting 4-tuples `(date, description, amount, kind)`. It does NOT collapse — `activity_output.py` owns grouping. Keep only the spendable currency
+- **`activity_output.py`** — the shared output contract. Ships in the template **verbatim**; do NOT edit it (CI byte-diffs every copy against the canonical `skills/points-activity/scripts/activity_output.py`)
 - **`capture_auth.js`** (only if needed) — for runtime-attached auth headers
 
 ### 4. Write `SKILL.md`

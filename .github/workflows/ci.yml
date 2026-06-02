@@ -21,7 +21,7 @@ jobs:
         run: |
           fail=0
           found=0
-          for t in skills/*/tests/test_transform.py; do
+          for t in skills/*/tests/test_transform.py templates/*/tests/test_transform.py; do
             [ -f "$t" ] || continue
             found=1
             echo "== $t =="

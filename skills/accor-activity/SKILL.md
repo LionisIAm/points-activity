@@ -71,9 +71,9 @@ Status points and Nights are intentionally ignored). Logic (in `scripts/transfor
    *earning/transfer*.
 2. **Redemptions**: keep the real transaction date; each stays its own row (matched to
    invoices later); hotel name kept in the description.
-3. **Earnings/transfers**: move the date to the last day of its month so repeated
-   monthly items collapse.
-4. **Collapse** by (Date, Description), sum reward Points.
+3. **Earnings/transfers**: keep the real transaction date, `kind='earn'`.
+4. Emit 4-tuples; the shared `activity_output.py` collapses earnings by
+   (Date, Description), summing reward Points.
 5. **Drop zero-point rows** after collapsing (rows that only carried Status/Nights, or
    that net to zero, fall out).
 

@@ -87,9 +87,9 @@ PQP/PQF/PQS ignored). Logic (in `scripts/transform.py`):
    earning/transfer.
 2. **Flights**: keep the real transaction date; each its own row (matched to
    itineraries later); flight number + route kept in the description.
-3. **Earnings/transfers**: move the date to the last day of its month so repeated
-   monthly card-earn lines collapse.
-4. **Collapse** by (Date, Description), sum miles.
+3. **Earnings/transfers**: keep the real transaction date, `kind='earn'`.
+4. Emit 4-tuples; the shared `activity_output.py` collapses earnings by
+   (Date, Description), summing miles.
 5. **Drop zero-mile rows** after collapsing (PQP-only rows fall out).
 
 ## Recurring / scheduled use (monthly)

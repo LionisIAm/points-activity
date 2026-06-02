@@ -80,7 +80,7 @@ The table has 7 columns:
    *earning/transfer*.
 2. **Redemptions** keep the real date; each row stays separate (per passenger; a reversal
    is its own row) so a change/rebook nets out per-leg and rows match itineraries.
-3. **Earnings/transfers** → last day of month, collapse identical (date, description).
+3. **Earnings/transfers** → keep real date, `kind='earn'`; shared `activity_output.py` collapses identical (date, description).
 4. **Drop zero-Total rows** after collapsing.
 5. Do **not** case-normalize descriptions: Atmos genuinely lists some award rows twice
    with different name casing — those are real separate transactions.
