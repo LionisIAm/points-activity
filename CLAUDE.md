@@ -39,6 +39,12 @@ Solo-maintained, MIT, public. No commercial backing.
 └── .gitignore                         # csv excluded so no real account data ever commits
 ```
 
+> **Test coverage is being backfilled.** Not every `<program>-activity/` has a
+> `tests/` dir yet (currently: alaska, bilt). The rest land during the v0.3
+> contract migration. CI (`.github/workflows/ci.yml`) runs whatever
+> `test_transform.py` files exist plus the repo-wide registration checks
+> (`tests/test_registration.py`), so coverage only ratchets up.
+
 ## Critical conventions
 
 ### Unified output contract
