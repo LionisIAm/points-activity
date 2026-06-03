@@ -4,7 +4,7 @@ Project context for AI assistants working in this repo. End users → read [READ
 
 ## What this is
 
-A Claude plugin (`points-activity`) that extracts loyalty points/miles activity from airline and hotel programs into a unified CSV. One **orchestrator** skill routes to **7 program-specific sub-skills** (Hyatt, United, IHG, Accor, Aeroplan, Alaska, Bilt) or falls back to a generic playbook for unsupported programs. Skills drive the user's **own logged-in browser** via the **Claude in Chrome** MCP — the plugin never asks for or stores credentials.
+A Claude plugin (`points-activity`) that extracts loyalty points/miles activity from airline and hotel programs into a unified CSV. One **orchestrator** skill routes to **10 program-specific extractor sub-skills** (Hyatt, United, IHG, Accor, Aeroplan, Alaska, Bilt, Flying Blue, Qatar Privilege Club, Hilton Honors) or falls back to a generic playbook for unsupported programs. Extractors drive the user's **own logged-in browser** via the **Claude in Chrome** MCP — the plugin never asks for or stores credentials. Optional **importer** sub-skills (`finerd-import`, plus `monarch-import` / `copilot-import` scaffolds) push the unified CSV into a finance app via that app's MCP — see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Adding an extractor never requires touching an importer.
 
 Solo-maintained, MIT, public. No commercial backing.
 
@@ -22,6 +22,7 @@ Solo-maintained, MIT, public. No commercial backing.
 │   └── <program>-activity/           # one per supported program (hyatt, united, ihg, ...)
 │       ├── SKILL.md
 │       ├── scripts/
+│       │   ├── wait_for_login.js     # polls until logged in (API probe, or balance renders)
 │       │   ├── fetch_activity.js     # API path (hits internal endpoint)
 │       │   ├── scrape_activity.js    # DOM path (reads rendered page) — alternative to API
 │       │   ├── dump_console.js       # console-dumps rows for read_console_messages
@@ -31,13 +32,25 @@ Solo-maintained, MIT, public. No commercial backing.
 │       └── tests/
 │           ├── fixtures/raw_dump.txt # sanitized sample console dump
 │           └── test_transform.py     # stdlib unittest, no pytest dep
+├── templates/
+│   └── activity-skill/               # contributor scaffold — `cp -R` to skills/<program>-activity (runnable example)
+├── tests/
+│   └── test_registration.py          # fails if a *-activity program isn't wired into the routing table
 ├── .github/
-│   ├── workflows/release.yml         # on `v*` tag → builds .plugin, attaches to GitHub Release
+│   ├── workflows/
+│   │   ├── ci.yml                     # py_compile + per-program & template tests + registration + activity_output byte-diff + node --check
+│   │   └── release.yml               # on `v*` tag → builds .plugin, attaches to GitHub Release
 │   ├── ISSUE_TEMPLATE/               # bug / new-program / playbook-broken
 │   └── PULL_REQUEST_TEMPLATE.md
 ├── README.md / CONTRIBUTING.md / SECURITY.md / LICENSE / CLAUDE.md (this)
 └── .gitignore                         # csv excluded so no real account data ever commits
 ```
+
+> **Test coverage is being backfilled.** Not every `<program>-activity/` has a
+> `tests/` dir yet (currently: alaska, bilt). The rest land during the v0.3
+> contract migration. CI (`.github/workflows/ci.yml`) runs whatever
+> `test_transform.py` files exist plus the repo-wide registration checks
+> (`tests/test_registration.py`), so coverage only ratchets up.
 
 ## Critical conventions
 
@@ -59,7 +72,7 @@ Every program emits identical CSV shape via `activity_output.py:write_activity(p
 
 ### Collapsing rules (shared across programs)
 - Redemptions / flights / reward bookings → keep **real** transaction date, each its own row (so they can be matched against itineraries/invoices)
-- Earnings / transfers / bonuses → move date to **last day of the month**, then collapse identical `(date, description)` rows by summing
+- Earnings / transfers / bonuses → keep their **real** transaction date, then collapse identical `(date, description)` rows by summing
 - Drop zero-amount rows after collapsing
 - Keep only spendable currency (e.g. United miles, not PQP; Accor reward points, not status points)
 

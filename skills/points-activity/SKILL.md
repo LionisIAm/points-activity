@@ -24,15 +24,19 @@ a known sub-skill if one exists, else (3) extracts using the general playbook be
 - **Collapsing rules** (shared across programs):
   - *Redemptions / flights / reward bookings* (things later matched to invoices or
     itineraries) → keep the REAL transaction date; each booking its own row.
-  - *Earnings / transfers / bonuses* → move the date to the LAST DAY of its month and
-    collapse identical (date, description) rows by summing.
+  - *Earnings / transfers / bonuses* → keep the REAL transaction date; identical
+    (date, description) rows are collapsed by summing.
   - Drop zero-amount rows after collapsing.
   - For a program with multiple point "currencies" (e.g. Accor reward vs status,
     United miles vs PQP), keep only the SPENDABLE currency (reward points / redeemable
     miles); ignore status/qualifying credits.
-- The sub-skill transforms all emit this via the shared helper
-  `points-activity/scripts/activity_output.py` (`write_activity(...)`), which also
-  prints machine-readable `BALANCE:`, `COVERED:`, `REQUESTED:`, `FILE:`, `ROWS:` lines.
+- **Sub-skills classify, the shared helper groups.** Each `transform.py` emits
+  4-tuples `(date, description, amount, kind)` with `kind in {'earn','redeem'}`;
+  `points-activity/scripts/activity_output.py` (`write_activity(...)`) owns the
+  grouping (earn → collapse by (real date, description); redeem → each its own row)
+  and also prints machine-readable `BALANCE:`, `COVERED:`, `REQUESTED:`, `FILE:`,
+  `ROWS:` lines. Adding a program is parse-and-classify only — no per-program
+  collapse logic. (3-tuples are still accepted and treated as `earn`.)
 
 ## Period handling
 
@@ -60,6 +64,9 @@ doesn't "call" skills — it follows their steps):
 | Air Canada Aeroplan | aircanada.com | `aeroplan-activity` | DOM scrape (2-year filter; Family Sharing caveat) |
 | Alaska Atmos Rewards | alaskaair.com | `alaska-activity` | DOM scrape (Shadow DOM; 24-month filter) |
 | Bilt Rewards | bilt.com | `bilt-activity` | JSON API (month+year iteration; full history) |
+| Flying Blue (Air France-KLM) | flyingblue.com | `flyingblue-activity` | internal JSON API (session cookie; full history in one call) |
+| Qatar Airways Privilege Club | qatarairways.com | `qatar-activity` | DOM scrape (rendered table; ~10 most recent visible) |
+| Hilton Honors | hilton.com | `hilton-activity` | DOM scrape (paginated; 12-month max; redemptions not exposed on web) |
 
 If the user names a program with a sub-skill, prefer going straight to it. If they
 give only a URL or a generic ask, match the domain above; if no match, use the general
@@ -69,9 +76,13 @@ playbook.
 
 Follow this to extract a new program, then consider writing a new sub-skill for it.
 
-1. **Open & verify login.** Navigate to the activity page in the connected Chrome.
-   Confirm login programmatically (balance visible, no sign-in buttons; URL not on a
-   /sign-in path). Never log in for the user. Decline cookie banners (privacy).
+1. **Open & wait for login (no user prompt).** Navigate to the activity page in the
+   connected Chrome, then run the sub-skill's `scripts/wait_for_login.js` via
+   `javascript_tool`: it polls every ~3s for up to 4 minutes and returns
+   `{status:"logged-in", ...}` or `{status:"timeout"}`. Detection is either an
+   auth-gated API probe (API programs) or "URL not on a /sign-in path AND a balance
+   value renders" (DOM programs). Only ask the user if it times out. Never log in for
+   the user. Decline cookie banners (privacy).
 2. **Find the data source — API first.** Read `performance.getEntriesByType('resource')`
    for backend hosts/paths matching activity|transaction|history|loyalty|points (filter
    out analytics/CDN). If an endpoint exists:

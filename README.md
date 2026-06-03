@@ -1,6 +1,6 @@
 # points-activity
 
-Extract loyalty points and miles account activity from airline and hotel loyalty programs into a unified CSV — using your own logged-in browser session. No credentials are ever stored, nothing leaves your machine.
+Extract loyalty points and miles account activity from airline and hotel loyalty programs into a unified CSV — using your own logged-in browser session. No credentials are ever stored. Extraction is fully local: the CSV is written to your disk and nothing is sent anywhere. **Optional** importers can then push that CSV into your own finance app (Finerd today; Monarch and Copilot scaffolded) via that app's MCP — only if you choose to install one.
 
 ## What it does
 
@@ -23,8 +23,11 @@ For each supported loyalty program, the skill:
 | Air Canada Aeroplan | DOM scrape (2-year filter) | 2 years (program limit) |
 | Alaska Atmos Rewards | DOM scrape (Shadow DOM traversal) | 24 months (program limit) |
 | Bilt Rewards | Internal JSON API (month+year iteration) | Full |
+| Flying Blue (Air France-KLM) | Internal JSON API | Full (one call) |
+| Qatar Airways Privilege Club | DOM scrape | ~10 most recent visible |
+| Hilton Honors | DOM scrape (paginated) | 12 months (program limit); redemptions not on web |
 
-Plus a **generic playbook** for programs without a dedicated sub-skill (Marriott, Hilton, Delta, Amex MR, etc.) — Claude tries API-first, falls back to DOM, then to export-to-excel if available.
+Plus a **generic playbook** for programs without a dedicated sub-skill (Marriott, Delta, Amex MR, etc.) — Claude tries API-first, falls back to DOM, then to export-to-excel if available.
 
 ## Requirements
 
@@ -116,7 +119,7 @@ Every program emits the same shape so downstream tools can be uniform:
 - **Balance**: reported alongside the file
 - **Collapsing**:
   - Redemptions / flights / reward bookings keep their **real** transaction date (each its own row, so you can match against itineraries)
-  - Earnings / transfers / bonuses are moved to the **last day of their month** and identical `(date, description)` rows are summed
+  - Earnings / transfers / bonuses keep their **real** transaction date; identical `(date, description)` rows are summed
   - Zero-amount rows dropped
 - **Spendable currency only**: for programs with multiple currencies (Accor reward vs status, United miles vs PQP), only the spendable one is included
 
@@ -128,7 +131,12 @@ That part is up to you. Common uses:
 - Feed into a finance / budgeting tool that accepts CSV imports
 - Diff month-over-month to spot unexpected redemptions
 
-This plugin's scope ends at CSV. Integrations with specific finance tools are out of scope here.
+The CSV is the core deliverable, and for many people that's the whole story. If you
+want it pushed into a finance app, **optional importers** (`skills/<app>-import/`) do
+that via the app's MCP — `finerd-import` today, `monarch-import` and `copilot-import`
+scaffolded. Importers are opt-in and fully decoupled: adding a loyalty program never
+requires touching any importer, and never-delete is a hard rule for all of them. See
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Adding a new program
 

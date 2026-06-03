@@ -64,10 +64,10 @@ b: [{t (benefit item title), v (points int)}]}`.
   - **Redemption** = any entry with `totalPoints < 0`. Transfers to partners (World of
     Hyatt, British Airways/Avios, Accor, Atmos, Flying Blue, …) and reversals/refunds.
     Keep the **real date**, each entry its **own row**, description = the title.
-  - **Earning** = `totalPoints >= 0`. Explode into benefit **items**; move each to the
-    **last day of its month**; collapse by **(month, item-title)** summed across **all
-    merchants** — no merchant in the key. So every "3x Points on Dining" in a month
-    becomes a single row.
+  - **Earning** = `totalPoints >= 0`. Explode into benefit **items** on the spend's
+    **real date**, `kind='earn'`, no merchant in the title. The shared
+    `activity_output.py` collapses identical `(date, item-title)` rows — so multiple
+    "3x Points on Dining" on the **same day** merge; different days stay separate.
 
 - Drop zero-amount rows after collapsing (status rows like "Earned Gold status" carry no
   points and disappear).

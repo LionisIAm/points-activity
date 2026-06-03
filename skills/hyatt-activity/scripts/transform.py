@@ -7,24 +7,23 @@ Input raw file: '~'-delimited lines (HX console lines, prefix stripped):
 (date ISO; bonusDetail = "Label=amount; Label=amount" or empty)
 
 Logic (verified to reconcile to balance):
-  - Explode each point-bearing component into its own row:
-      STAY: baseAmount (if >0) as "Base Points/Miles" + each bonusDetail item.
+  - Explode each point-bearing component into its own (date, desc, amount, kind):
+      STAY: baseAmount (if >0) with the HOTEL NAME as description (so the user
+        sees "Hyatt Centric Faneuil Hall Boston" not generic "Base Points/Miles")
+        + each bonusDetail item (description = the bonus label).
       else (BONUS/AWARD/PARTNER_EARN): amount in totalAmount; + any bonusDetail items.
   - A component counts (PointsType P) when txn pointsType=='P', or it's a STAY/bonus
     component, or AWARD/PARTNER_EARN with nonzero total. 'N' (nights) excluded.
-  - Redemptions (AWARD) keep real date; everything else -> end of month; collapse by
-    (date, component); drop zeros.
+  - kind='redeem' when the source transaction category is AWARD (so each award
+    stay stays its own row); everything else (STAY/BONUS/PARTNER_EARN base +
+    bonuses) is kind='earn' and gets collapsed by (date, desc) in shared code.
 
 Usage: python3 transform.py raw.txt out_dir [requested_from] [requested_to] [balance]
 """
-import calendar, sys, os
+import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # activity_output.py is shipped in points-activity/scripts; sub-skills get a copy at deploy.
 from activity_output import write_activity, filter_by_period
-
-def eom(d):
-    y, m, _ = d.split('-'); y, m = int(y), int(m)
-    return f"{y:04d}-{m:02d}-{calendar.monthrange(y, m)[1]:02d}"
 
 def main():
     raw, out_dir = sys.argv[1], sys.argv[2]
@@ -42,7 +41,9 @@ def main():
                 k, v = part.rsplit('=', 1); bonus_items.append((k.strip(), int(v)))
         comps = []
         if cat == 'STAY':
-            if base > 0: comps.append(('Base Points/Miles', base, ptype))
+            # Use the hotel name (not generic "Base Points/Miles") so the
+            # description carries useful context downstream.
+            if base > 0: comps.append((name or 'Base Points/Miles', base, ptype))
             for k, v in bonus_items: comps.append((k, v, 'P'))
         else:
             pt = 'P' if (ptype == 'P' or (cat in ('PARTNER_EARN', 'AWARD') and total != 0)) else ptype
@@ -50,18 +51,14 @@ def main():
             for k, v in bonus_items: comps.append((k, v, 'P'))
         if not comps:
             comps.append((name, 0, ptype))
+        kind = 'redeem' if cat == 'AWARD' else 'earn'
         for label, pts, pt in comps:
             if pt != 'P':
                 continue
-            d = date if cat == 'AWARD' else eom(date)
-            out.append((d, label, pts))
+            out.append((date, label, pts, kind))
 
-    agg = {}
-    for d, desc, a in out:
-        agg[(d, desc)] = agg.get((d, desc), 0) + a
-    collapsed = [(d, desc, a) for (d, desc), a in agg.items()]
-    collapsed = filter_by_period(collapsed, rfrom, rto)
-    write_activity('hyatt', collapsed, out_dir, rfrom, rto, bal)
+    out = filter_by_period(out, rfrom, rto)
+    write_activity('hyatt', out, out_dir, rfrom, rto, bal)
 
 if __name__ == '__main__':
     main()

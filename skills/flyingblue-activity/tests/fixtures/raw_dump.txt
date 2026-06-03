@@ -1,0 +1,6 @@
+2026-02-24 ~~ R ~~ SFO - CDG - BCN, Passenger One ~~ -60000
+2026-02-24 ~~ R ~~ SFO - CDG - BCN, Passenger Two ~~ -60000
+2025-11-23 ~~ E ~~ AMERICAN EXPRESS MEMBERSHIP REWARD MILES ~~ 110000
+2025-09-04 ~~ E ~~ Hotel partner MILES+POINTS ~~ 31
+2025-09-04 ~~ E ~~ Hotel partner MILES+POINTS ~~ 49
+2025-06-08 ~~ E ~~ Status match bonus ~~ 10000

@@ -148,5 +148,70 @@
     "query": "how many Bilt points do I need to transfer to Hyatt for a free night?",
     "should_trigger": "none",
     "note": "NEAR MISS: Bilt transfer but award pricing question"
+  },
+  {
+    "query": "get my Flying Blue miles activity for the last year",
+    "should_trigger": "flyingblue-activity",
+    "note": "named program + period"
+  },
+  {
+    "query": "export everything from https://www.flyingblue.com/en/dashboard",
+    "should_trigger": "flyingblue-activity",
+    "note": "URL only"
+  },
+  {
+    "query": "sync my Air France-KLM miles and tell me my balance",
+    "should_trigger": "flyingblue-activity",
+    "note": "synonym (Air France-KLM) + balance"
+  },
+  {
+    "query": "book an award seat to Paris using my Flying Blue miles",
+    "should_trigger": "none",
+    "note": "NEAR MISS: Flying Blue award but booking, not activity"
+  },
+  {
+    "query": "how many Flying Blue miles for business class to Tokyo?",
+    "should_trigger": "none",
+    "note": "NEAR MISS: award pricing, not my activity"
+  },
+  {
+    "query": "pull my Qatar Airways Privilege Club Avios activity and balance",
+    "should_trigger": "qatar-activity",
+    "note": "named program + balance"
+  },
+  {
+    "query": "export everything from https://www.qatarairways.com/en/Privilege-Club/postLogin/dashboardqrpcuser/my-activities.html",
+    "should_trigger": "qatar-activity",
+    "note": "URL only"
+  },
+  {
+    "query": "book a Qsuite award to Doha with my Avios",
+    "should_trigger": "none",
+    "note": "NEAR MISS: Avios but booking"
+  },
+  {
+    "query": "what's the Avios price for a Qatar flight to the Maldives?",
+    "should_trigger": "none",
+    "note": "NEAR MISS: award pricing question"
+  },
+  {
+    "query": "get my Hilton Honors points activity and current balance",
+    "should_trigger": "hilton-activity",
+    "note": "named program + balance"
+  },
+  {
+    "query": "export everything from https://www.hilton.com/en/hilton-honors/guest/activity/",
+    "should_trigger": "hilton-activity",
+    "note": "URL only"
+  },
+  {
+    "query": "book a Hilton in Rome with my points next month",
+    "should_trigger": "none",
+    "note": "NEAR MISS: Hilton points but booking"
+  },
+  {
+    "query": "how many Hilton points for a night at the Conrad Maldives?",
+    "should_trigger": "none",
+    "note": "NEAR MISS: award pricing question"
   }
 ]

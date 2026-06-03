@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Syntax check (stdlib only — no external deps allowed)
+        run: |
+          find . -name '*.py' -not -path './.git/*' -print0 \
+            | xargs -0 -n1 python -m py_compile
+      - name: Per-program unit tests
+        run: |
+          fail=0
+          found=0
+          for t in skills/*/tests/test_transform.py templates/*/tests/test_transform.py; do
+            [ -f "$t" ] || continue
+            found=1
+            echo "== $t =="
+            ( cd "$(dirname "$t")" && python3 test_transform.py ) || fail=1
+          done
+          [ "$found" = 1 ] || echo "(no per-program tests found yet)"
+          exit $fail
+      - name: Registration checks
+        run: python3 tests/test_registration.py
+      - name: Shared helper copies are byte-identical to canonical
+        run: |
+          fail=0
+          for helper in activity_output.py canonical_csv.py; do
+            canon="skills/points-activity/scripts/$helper"
+            for f in skills/*/scripts/"$helper" templates/*/scripts/"$helper"; do
+              [ -f "$f" ] || continue
+              [ "$f" = "$canon" ] && continue
+              if ! cmp -s "$canon" "$f"; then
+                echo "DIVERGED from canonical ($helper): $f"
+                fail=1
+              fi
+            done
+          done
+          [ $fail -eq 0 ] && echo "OK: all shared-helper copies match canonical"
+          exit $fail
+
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Syntax check all JS (browser scripts — parse only, never executed)
+        run: |
+          fail=0
+          while IFS= read -r -d '' f; do
+            node --check "$f" || { echo "SYNTAX FAIL: $f"; fail=1; }
+          done < <(find . -name '*.js' -not -path './.git/*' -print0)
+          exit $fail
